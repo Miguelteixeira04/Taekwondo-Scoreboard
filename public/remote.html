@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Comando TKD</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="remote-container">
+        <div class="remote-col blue-zone">
+            <button class="btn-tkd head-btn" onclick="sendScore('blue', 3)">Cabeça (3)</button>
+            <button class="btn-tkd body-btn" onclick="sendScore('blue', 2)">Tronco (2)</button>
+            <button class="btn-tkd tech-btn" onclick="sendScore('blue', 2)">ROTATIVO (+2)</button>
+            
+            <div class="row-btns">
+                <button class="btn-tkd punch-btn" onclick="sendScore('blue', 1)">Murro (1)</button>
+                <button class="btn-tkd gamjeom-btn" onclick="sendPenalty('blue')">GAM-JEOM</button>
+            </div>
+        </div>
+
+        <div class="remote-col red-zone">
+            <button class="btn-tkd head-btn" onclick="sendScore('red', 3)">Cabeça (3)</button>
+            <button class="btn-tkd body-btn" onclick="sendScore('red', 2)">Tronco (2)</button>
+            <button class="btn-tkd tech-btn" onclick="sendScore('red', 2)">ROTATIVO (+2)</button>
+
+            <div class="row-btns">
+                <button class="btn-tkd punch-btn" onclick="sendScore('red', 1)">Murro (1)</button>
+                <button class="btn-tkd gamjeom-btn" onclick="sendPenalty('red')">GAM-JEOM</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="ctrl-btn" onclick="controlTimer()">⏱ Start/Stop</button>
+        <button class="ctrl-btn" onclick="resetMatch()">🔄 Reset</button>
+    </div>
+
+    <script>
+        const socket = io();
+
+        function sendScore(color, points) {
+            if(navigator.vibrate) navigator.vibrate(50);
+            socket.emit('action', { type: 'score', color: color, points: points });
+        }
+
+        function sendPenalty(color) {
+            if(confirm('Marcar GAM-JEOM ao ' + color + '? (+1 ponto ao adversário)')) {
+                if(navigator.vibrate) navigator.vibrate(200);
+                socket.emit('action', { type: 'penalty', color: color });
+            }
+        }
+
+        function controlTimer() {
+            socket.emit('action', { type: 'timer' });
+        }
+
+        function resetMatch() {
+            if(confirm('Reiniciar o combate?')) {
+                socket.emit('action', { type: 'reset' });
+            }
+        }
+    </script>
+</body>
+</html>

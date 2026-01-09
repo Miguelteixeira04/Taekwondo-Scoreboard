@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>TKD Scoreboard Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div id="settingsModal">
+        <h2 style="margin-top:0">Configuração de Combate</h2>
+        <div class="form-group">
+            <label>Atleta Azul (Nome)</label>
+            <input type="text" id="inBlueName" value="HONG">
+        </div>
+        <div class="form-group">
+            <label>Atleta Vermelho (Nome)</label>
+            <input type="text" id="inRedName" value="CHUNG">
+        </div>
+        <div class="form-group">
+            <label>Tempo Round (segundos)</label>
+            <input type="number" id="inRoundTime" value="120">
+        </div>
+        <div class="form-group">
+            <label>Tempo Descanso (segundos)</label>
+            <input type="number" id="inRestTime" value="60">
+        </div>
+        <button class="btn-save" onclick="saveSettings()">GUARDAR & INICIAR</button>
+    </div>
+
+    <div class="board-container">
+        <div class="zone blue-zone">
+            <div class="athlete-name" id="dispBlueName">HONG</div>
+            <div class="score-big" id="scoreBlue">0</div>
+            <div class="penalty-box">GAM-JEOM: <span id="penBlue">0</span></div>
+        </div>
+
+        <div class="center-panel">
+            <div class="round-display">ROUND <span id="round">1</span></div>
+            <div class="timer" id="timer">02:00</div>
+            <button class="btn-settings" onclick="openSettings()">⚙️ Config</button>
+        </div>
+
+        <div class="zone red-zone">
+            <div class="athlete-name" id="dispRedName">CHUNG</div>
+            <div class="score-big" id="scoreRed">0</div>
+            <div class="penalty-box">GAM-JEOM: <span id="penRed">0</span></div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        const modal = document.getElementById('settingsModal');
+        
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function openSettings() {
+            modal.classList.remove('hidden');
+        }
+
+        function saveSettings() {
+            const config = {
+                blueName: document.getElementById('inBlueName').value,
+                redName: document.getElementById('inRedName').value,
+                roundTime: document.getElementById('inRoundTime').value,
+                restTime: document.getElementById('inRestTime').value
+            };
+            socket.emit('updateSettings', config);
+            modal.classList.add('hidden');
+        }
+
+        socket.on('updateState', (data) => {
+            document.getElementById('dispBlueName').innerText = data.blueName;
+            document.getElementById('dispRedName').innerText = data.redName;
+            document.getElementById('scoreBlue').innerText = data.blueScore;
+            document.getElementById('scoreRed').innerText = data.redScore;
+            document.getElementById('penBlue').innerText = data.bluePenalty;
+            document.getElementById('penRed').innerText = data.redPenalty;
+            document.getElementById('round').innerText = data.round;
+            document.getElementById('timer').innerText = formatTime(data.time);
+        });
+
+        socket.on('updateTimer', (time) => {
+            document.getElementById('timer').innerText = formatTime(time);
+        });
+    </script>
+</body>
+</html>

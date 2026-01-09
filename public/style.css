@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial Black', sans-serif;
+    background-color: #000;
+    color: white;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.board-container { display: flex; width: 100%; height: 100vh; }
+.zone { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+.blue-zone { background-color: #0047BB; }
+.red-zone { background-color: #E21B22; }
+.athlete-name { position: absolute; top: 20px; font-size: 3vw; text-transform: uppercase; text-shadow: 2px 2px 5px rgba(0,0,0,0.7); z-index: 5; }
+.score-big { font-size: 25vw; line-height: 1; font-weight: 900; text-shadow: 5px 5px 10px rgba(0,0,0,0.5); }
+.penalty-box { font-size: 2vw; margin-top: 20px; background: rgba(0,0,0,0.3); padding: 10px 20px; border-radius: 10px; }
+.center-panel { position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 18%; background: rgba(0,0,0,0.85); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; border-left: 3px solid white; border-right: 3px solid white; }
+.timer { font-size: 4vw; color: #ffd700; margin-bottom: 20px; }
+.round-display { font-size: 2vw; margin-bottom: 50px; }
+
+#settingsModal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #222; padding: 30px; border: 2px solid #555; z-index: 100; text-align: center; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.9); }
+.hidden { display: none; }
+.form-group { margin-bottom: 15px; text-align: left; }
+label { display: block; font-size: 1rem; margin-bottom: 5px; color: #aaa; font-family: Arial, sans-serif; }
+input { width: 100%; padding: 10px; font-size: 1.2rem; box-sizing: border-box; }
+.btn-save { padding: 10px 20px; font-size: 1.2rem; background: green; color: white; border: none; cursor: pointer; width: 100%; }
+.btn-settings { position: absolute; bottom: 20px; font-size: 0.8rem; background: transparent; border: 1px solid #555; color: #555; cursor: pointer; }
+
+.remote-container { display: grid; grid-template-columns: 1fr 1fr; height: 100vh; padding-bottom: 60px; box-sizing: border-box; }
+.remote-col { display: flex; flex-direction: column; border-right: 1px solid black; }
+
+.btn-tkd { 
+    border: none; color: white; 
+    font-size: 1.3rem; font-weight: bold; 
+    cursor: pointer; 
+    border-bottom: 1px solid rgba(0,0,0,0.3); 
+    text-transform: uppercase; 
+    width: 100%;
+    transition: filter 0.1s;
+}
+.btn-tkd:active { filter: brightness(80%); transform: scale(0.98); }
+
+.head-btn { background: rgba(255,255,255,0.25); flex: 2; font-size: 1.5rem; }
+.body-btn { background: rgba(0,0,0,0.1); flex: 2; font-size: 1.5rem; }
+
+.tech-btn { background: #6a0dad; color: #fff; flex: 1.5; border-top: 2px solid rgba(255,255,255,0.1); }
+
+.row-btns { display: flex; flex: 1.5; }
+.punch-btn { background: rgba(0,0,0,0.2); flex: 1; font-size: 1rem; }
+.gamjeom-btn { background: #FFD700; color: black; flex: 1; font-size: 0.9rem; border-left: 1px solid black; }
+
+.controls { position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; background: #222; display: flex; z-index: 20; }
+.ctrl-btn { flex: 1; background: #333; color: white; border: 1px solid #111; font-size: 1.2rem; }
