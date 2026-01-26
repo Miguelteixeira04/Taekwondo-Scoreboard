@@ -2,39 +2,55 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <title>Comando TKD</title>
     <link rel="stylesheet" href="style.css">
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-    <div class="remote-container">
-        <div class="remote-col blue-zone">
-            <button class="btn-tkd head-btn" onclick="sendScore('blue', 3)">Cabeça (3)</button>
-            <button class="btn-tkd body-btn" onclick="sendScore('blue', 2)">Tronco (2)</button>
-            <button class="btn-tkd tech-btn" onclick="sendScore('blue', 2)">ROTATIVO (+2)</button>
-            
-            <div class="row-btns">
-                <button class="btn-tkd punch-btn" onclick="sendScore('blue', 1)">Murro (1)</button>
+    
+    <div class="remote-layout">
+        
+        <div class="player-col blue-zone">
+            <div class="top-row">
+                <button class="btn-tkd head-btn" onclick="sendScore('blue', 3)">CABEÇA (3)</button>
+                <button class="btn-tkd body-btn" onclick="sendScore('blue', 2)">TRONCO (2)</button>
+            </div>
+            <div class="mid-row">
+                <button class="btn-tkd tech-btn" onclick="sendScore('blue', 2)">ROTATIVO (+2)</button>
+            </div>
+            <div class="bot-row">
+                <button class="btn-tkd punch-btn" onclick="sendScore('blue', 1)">SOCO</button>
                 <button class="btn-tkd gamjeom-btn" onclick="sendPenalty('blue')">GAM-JEOM</button>
             </div>
         </div>
 
-        <div class="remote-col red-zone">
-            <button class="btn-tkd head-btn" onclick="sendScore('red', 3)">Cabeça (3)</button>
-            <button class="btn-tkd body-btn" onclick="sendScore('red', 2)">Tronco (2)</button>
-            <button class="btn-tkd tech-btn" onclick="sendScore('red', 2)">ROTATIVO (+2)</button>
+        <div class="center-controls">
+            <button class="ctrl-btn main-action" onclick="controlTimer()">⏱<br>START</button>
+            <button class="ctrl-btn next-action" onclick="nextRound()">➤<br>RND</button>
+            <button class="ctrl-btn reset-action" onclick="resetMatch()">↺<br>RESET</button>
+            <button class="ctrl-btn fs-action" onclick="toggleFullScreen()">⛶</button>
+        </div>
 
-            <div class="row-btns">
-                <button class="btn-tkd punch-btn" onclick="sendScore('red', 1)">Murro (1)</button>
+        <div class="player-col red-zone">
+            <div class="top-row">
+                <button class="btn-tkd head-btn" onclick="sendScore('red', 3)">CABEÇA (3)</button>
+                <button class="btn-tkd body-btn" onclick="sendScore('red', 2)">TRONCO (2)</button>
+            </div>
+            <div class="mid-row">
+                <button class="btn-tkd tech-btn" onclick="sendScore('red', 2)">ROTATIVO (+2)</button>
+            </div>
+            <div class="bot-row">
+                <button class="btn-tkd punch-btn" onclick="sendScore('red', 1)">SOCO</button>
                 <button class="btn-tkd gamjeom-btn" onclick="sendPenalty('red')">GAM-JEOM</button>
             </div>
         </div>
-    </div>
 
-    <div class="controls">
-        <button class="ctrl-btn" onclick="controlTimer()">⏱ Start/Stop</button>
-        <button class="ctrl-btn" onclick="resetMatch()">🔄 Reset</button>
     </div>
 
     <script>
@@ -46,19 +62,25 @@
         }
 
         function sendPenalty(color) {
-            if(confirm('Marcar GAM-JEOM ao ' + color + '? (+1 ponto ao adversário)')) {
-                if(navigator.vibrate) navigator.vibrate(200);
-                socket.emit('action', { type: 'penalty', color: color });
-            }
+            if(navigator.vibrate) navigator.vibrate(200);
+            socket.emit('action', { type: 'penalty', color: color });
         }
 
-        function controlTimer() {
-            socket.emit('action', { type: 'timer' });
+        function controlTimer() { socket.emit('action', { type: 'timer' }); }
+        
+        function nextRound() {
+            if(confirm('Próximo Round?')) socket.emit('action', { type: 'nextRound' });
         }
 
         function resetMatch() {
-            if(confirm('Reiniciar o combate?')) {
-                socket.emit('action', { type: 'reset' });
+            if(confirm('Reset total do combate?')) socket.emit('action', { type: 'reset' });
+        }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else if (document.exitFullscreen) {
+                document.exitFullscreen();
             }
         }
     </script>
