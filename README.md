@@ -1,6 +1,6 @@
 # Taekwondo Scoreboard
 
-Aplicação web para controlo e visualização de pontuação de Taekwondo, com suporte para controlo remoto através de um dispositivo móvel.
+Aplicação web para controlo e visualização de pontuação de Taekwondo, com suporte para controlo remoto através de um dispositivo móvel utilizando um novo layout otimizado.
 
 ---
 
